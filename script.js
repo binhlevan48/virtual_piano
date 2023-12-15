@@ -1,53 +1,64 @@
-const notes = {
-  C: new Audio('sounds/C.wav'),
-  'C#': new Audio('sounds/C#.wav'),
-  D: new Audio('sounds/D.wav'),
-  'D#': new Audio('sounds/D#.wav'),
-  E: new Audio('sounds/E.wav'),
-  F: new Audio('sounds/F.wav'),
-  'F#': new Audio('sounds/F#.wav'),
-  G: new Audio('sounds/G.wav'),
-  'G#': new Audio('sounds/G#.wav'),
-  A: new Audio('sounds/A.wav'),
-  'A#': new Audio('sounds/A#.wav'),
-  B: new Audio('sounds/B.wav'),
-};
+document.addEventListener("DOMContentLoaded", function() {
+  const whiteKeys = document.querySelectorAll(".white-key");
+  const blackKeys = document.querySelectorAll(".black-key");
 
-const keyboardMap = {
-  KeyA: 'C',
-  KeyW: 'C#',
-  KeyS: 'D',
-  KeyE: 'D#',
-  KeyD: 'E',
-  KeyF: 'F',
-  KeyT: 'F#',
-  KeyG: 'G',
-  KeyY: 'G#',
-  KeyH: 'A',
-  KeyU: 'A#',
-  KeyJ: 'B',
-  KeyK: 'C',
-  KeyO: 'C#',
-  KeyL: 'D',
-  Semicolon: 'D#',
-  Quote: 'E',
-};
+  const keyMap = {
+    a: "C",
+    w: "C#",
+    s: "D",
+    e: "D#",
+    d: "E",
+    f: "F",
+    t: "F#",
+    g: "G",
+    y: "G#",
+    h: "A",
+    u: "A#",
+    j: "B"
+  };
 
-document.addEventListener('keydown', (event) => {
-  const pianoKey = keyboardMap[event.code];
-  if (pianoKey && notes[pianoKey]) {
-    notes[pianoKey].currentTime = 0;
-    notes[pianoKey].play();
+  function playSound(note) {
+    const synth = new Tone.Synth().toDestination();
+    synth.triggerAttackRelease(note, "8n");
   }
-});
 
-const keys = document.querySelectorAll('.white-key, .black-key');
-keys.forEach((key) => {
-  key.addEventListener('click', () => {
-    const note = key.getAttribute('data-note');
-    if (notes[note]) {
-      notes[note].currentTime = 0;
-      notes[note].play();
+  document.addEventListener("keydown", (event) => {
+    const key = event.key.toLowerCase();
+    if (key in keyMap) {
+      const note = keyMap[key] + "4";
+      const pianoKey = document.querySelector(`[data-note='${keyMap[key]}']`);
+      pianoKey.classList.add("active");
+      playSound(note);
     }
+  });
+
+  document.addEventListener("keyup", (event) => {
+    const key = event.key.toLowerCase();
+    if (key in keyMap) {
+      const pianoKey = document.querySelector(`[data-note='${keyMap[key]}']`);
+      pianoKey.classList.remove("active");
+    }
+  });
+
+  whiteKeys.forEach(key => {
+    key.addEventListener("mousedown", () => {
+      const note = key.dataset.note + "4";
+      key.classList.add("active");
+      playSound(note);
+    });
+    key.addEventListener("mouseup", () => {
+      key.classList.remove("active");
+    });
+  });
+
+  blackKeys.forEach(key => {
+    key.addEventListener("mousedown", () => {
+      const note = key.dataset.note + "4";
+      key.classList.add("active");
+      playSound(note);
+    });
+    key.addEventListener("mouseup", () => {
+      key.classList.remove("active");
+    });
   });
 });
