@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Piano Ảo</title>
+  <title>Virtual Piano</title>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <div class="piano">
+  <h1>Virtual Piano</h1>
+  
+  <div id="piano">
     <div class="white-key" data-note="C"></div>
     <div class="black-key" data-note="C#"></div>
     <div class="white-key" data-note="D"></div>
@@ -20,6 +22,7 @@
     <div class="white-key" data-note="B"></div>
   </div>
 
+  <script src="https://unpkg.com/tone"></script>
   <script src="script.js"></script>
 </body>
 </html>
